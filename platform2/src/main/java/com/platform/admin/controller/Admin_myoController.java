@@ -29,7 +29,7 @@ public class Admin_myoController {
 
 	@RequestMapping("/")
 	public String main() {
-
+//
 		return "admin_index";
 	}
 
