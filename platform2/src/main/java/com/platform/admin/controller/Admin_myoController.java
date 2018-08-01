@@ -33,6 +33,7 @@ public class Admin_myoController {
 		return "admin_index";
 	}
 
+	
 	@RequestMapping("/starting_info")
 	public String starting_info() {
 		return "sports/starting_info";
