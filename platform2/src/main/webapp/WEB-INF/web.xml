@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+	<!-- The definition of the Root Spring Container shared by all Servlets 
+		and Filters -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+		/WEB-INF/spring/root-context.xml
+		/WEB-INF/spring/security-context.xml
+		</param-value>
+
+	</context-param>
+
+	<!-- Creates the Spring Container shared by all Servlets and Filters -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+
+
+	<!-- Processes application requests -->
+	<!-- Main servlet-context -->
+	<servlet>
+		<servlet-name>appServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>appServlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+
+	<!-- Dream servlet-context -->
+	<servlet>
+		<servlet-name>appServlet2</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/appServlet/servlet-context-dream.xml</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>appServlet2</servlet-name>
+		<url-pattern>/dream/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- Sports servlet-context -->
+	<servlet>
+		<servlet-name>appServlet3</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/appServlet/servlet-context-sports.xml</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>appServlet3</servlet-name>
+		<url-pattern>/sports/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- Shop servlet-context -->
+	<servlet>
+		<servlet-name>appServlet4</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/appServlet/servlet-context-shop.xml</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>appServlet4</servlet-name>
+		<url-pattern>/shop/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- Library servlet-context -->
+	<servlet>
+		<servlet-name>appServlet5</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/appServlet/servlet-context-library.xml</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>appServlet5</servlet-name>
+		<url-pattern>/library/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- Safety servlet-context -->
+	<servlet>
+		<servlet-name>appServlet6</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/appServlet/servlet-context-safety.xml</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>appServlet6</servlet-name>
+		<url-pattern>/safety/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- Travel servlet-context -->
+	<servlet>
+		<servlet-name>appServlet7</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/appServlet/servlet-context-travel.xml</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>appServlet7</servlet-name>
+		<url-pattern>/travel/*</url-pattern>
+	</servlet-mapping>
+
+
+	<!-- Encoding UTF-8 설정 -->
+	<filter>
+		<filter-name>encoding</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encoding</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- spring security -->
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+		<init-param>
+			<param-name>contextAttribute</param-name>
+			<param-value>org.springframework.web.servlet.FrameworkServlet.CONTEXT.appServlet</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+
+	<jsp-config>
+		<!-- shop include -->
+		<jsp-property-group>
+			<url-pattern>/WEB-INF/views/shop/*</url-pattern>
+			<include-prelude>/WEB-INF/views/shop/common/header.jspf</include-prelude>
+			<include-coda>/WEB-INF/views/shop/common/footer.jspf</include-coda>
+		</jsp-property-group>
+
+		<!-- dream -->
+		<jsp-property-group>
+			<url-pattern>/WEB-INF/views/dream/art/*</url-pattern>
+			<url-pattern>/WEB-INF/views/dream/space/*</url-pattern>
+			<url-pattern>/WEB-INF/views/dream/index.jsp</url-pattern>
+			<include-prelude>/WEB-INF/views/dream/include/header.jspf</include-prelude>
+			<include-coda>/WEB-INF/views/dream/include/footer.jspf</include-coda>
+		</jsp-property-group>
+	</jsp-config>
+
+
+
+
+</web-app>

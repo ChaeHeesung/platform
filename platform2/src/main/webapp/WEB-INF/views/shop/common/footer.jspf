@@ -1,0 +1,53 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>		
+		<div id="footer_wrapper">
+		<div id="quickmenu">
+		<p><a href='#'>↑</a></p>
+		<p><a href='#footer_wrapper'>↓</a></p>
+		</div>
+		
+		<div class="footerBox"  >
+		<ul>
+ 
+		<li><a href="/">HOME</a></li>
+				<li><a href="/">ABOUT US</a></li>
+				<li><a href="/">AGREEMENT</a></li>
+				<li><a href="/">PRIVACY POLICY</a></li>
+				<li><a href="/">GUIDE</a></li>
+		</ul> </div>
+		<div class="footerBox" >
+		<div style="padding-top: 18px"	>CS CENTER</div>
+		<p >
+				<br>010-9496-9360
+				<br>MON~FRI AM 11 - PM 05 (LUNCH PM12 - 01) 
+				<br>SUN.SAT.HOLIDAY OFF 
+				<br>카카오톡아이디 @콜림 
+	 	</p>
+		</div>
+		<div class="footerBox" style="width:415px; padding-left:90px;"  >
+		<div style="padding-top: 18px"	>COMPANY INFO</div>
+		<p >
+				<br>company. (주)콜림
+				<br>phone. 010-9496-9360
+				<br>address. 서울특별시 강남구 대치동 123-24 콜림빌딩 ca1호  
+				<br>e-mail. call_lim@naver.com 
+				<br>CEO. 임혜승
+	 	</p>
+		</div>
+		<div class="footerBox"  >
+ 		<div style="padding-top: 18px; float: left;"	>FOLLOW US. </div>
+		<div class="footer_logo"  ><a href='https://www.instagram.com/call_lim/' target='_blank'    ><img src="${pageContext.request.contextPath}/resources/shop/img/insta_logo.png"></a>
+		 <a href='https://www.facebook.com/hyeseung.lim' target='_blank' style="float:left;"><img src="${pageContext.request.contextPath}/resources/shop/img/facebook_logo.png"></a> </div>
+		</div>
+		<div class="footerBox"  >
+		<div style="padding-top: 18px;"	>BANK INFO </div>
+		<br>국민 697201-00-075599
+		<br>예금주 : (주)콜림
+		</div>
+		</div>
+		<div id="footer_copy">
+		COPYRIGHT (C) (주)콜림. ALL RIGHTS RESERVED. WEBSITE BY. CALL_LIM
+		</div>
+	</div>
+</body>
+</html>

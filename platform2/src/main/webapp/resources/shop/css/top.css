@@ -1,0 +1,59 @@
+@charset "UTF-8";
+.subcategory .menucategory > li {
+    display: inline-block;
+     margin:   0;
+    padding: 0;
+    font: 13px Nanum Gothic;  
+    line-height: 14px;
+    vertical-align: top;
+    padding-right: 15px;
+}
+.subcategory .menucategory > li>a {
+		    color:#686868;
+}
+li {
+    list-style: none;
+}
+a{
+	text-decoration: none;
+}
+ 
+.subcategory{
+	text-align: center;
+	
+}
+.menucategory > li>a:hover {
+	font-weight: bold;
+}
+
+#search_category a {
+	text-decoration: none;
+	color: #000000;
+		font: 15px Nanum Gothic;
+	
+}
+
+#search_category a:hover {
+	font-weight: bold;
+} /* search_category tag */
+#search_category ul {
+	padding-top: 50px;
+	text-align: right; 
+	padding-right: 10px
+} /* 상단 여백 10px */
+#search_category ul li {
+	display: inline; /* 세로나열을 가로나열로 변경 */
+	border-left: 1px solid #999; /* 각 메뉴의 왼쪽에 "|" 표시(분류 표시) */
+	padding: 0 10px; /* 각 메뉴 간격 */
+}
+
+#search_category ul li:first-child {
+	border-left: none;
+} /* 메뉴 분류중 제일 왼쪽의 "|"는 삭제*/
+
+.page_wrapper{
+margin-top:80px; 
+margin-bottom:80px;	
+	
+}
+

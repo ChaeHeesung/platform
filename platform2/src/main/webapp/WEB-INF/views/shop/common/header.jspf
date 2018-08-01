@@ -1,0 +1,98 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/shop/css/header.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/shop/css/footer.css">
+
+<title>CAll, LIM</title>
+
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+function searchItem(){
+	var search_item=$(".searchTerm").val();
+ 	location.href="/category/search?keyword="+encodeURI(search_item,"UTF_8");
+	console.log($(".searchTerm").val());
+}
+
+</script>
+<body style="background-color: white">
+	<div id="wrapper">
+		<div id="header">
+			<div id="topbar">
+				<div id="logo">
+					<h1>
+						<a href="/"> <img src="${pageContext.request.contextPath}/resources/shop/img/logo30.png"
+							width="180px" ; height="18px" ; alt="CALL,LIM(콜림)"></a>
+					</h1>
+				</div>
+				<div id="logbar">
+					<ul>
+						<li><a href="#">LOGIN</a></li>
+						<li><a href="#">JOIN US</a></li>
+						<li><a href="#">CART</a></li>
+						<li><a href="#">ORDER</a></li>
+						<li><a href="#">MYPAGE</a></li>
+					</ul>
+				</div>
+			</div>
+			<div id="inner" style="height: 140px;">
+				<div id="category">
+					<ul>
+						<li><a href="/category/new" onmouseover="this.innerHTML='신상5%할인'"
+							onmouseout="this.innerHTML='NEW5%'">NEW5%</a></li>
+						<li><a href="/category/top" onmouseover="this.innerHTML='상의'"
+							onmouseout="this.innerHTML='TOP'">TOP</a></li>
+						<li><a href="/category/outer" onmouseover="this.innerHTML='겉옷'"
+							onmouseout="this.innerHTML='OUTER'">OUTER</a></li>
+						<li><a href="/category/pants" onmouseover="this.innerHTML='하의'"
+							onmouseout="this.innerHTML='PANTS'">PANTS</a></li>
+						<li><a href="/category/skirt" onmouseover="this.innerHTML='치마&원피스'"
+							onmouseout="this.innerHTML='SKIRT&DRESS'">SKIRT&DRESS</a></li>
+					</ul>
+					<ul>
+						<li><a href="/category/bag" onmouseover="this.innerHTML='가방'"
+							onmouseout="this.innerHTML='BAG'">BAG</a></li>
+						<li><a href="/category/shoes" onmouseover="this.innerHTML='신발'"
+							onmouseout="this.innerHTML='SHOES'">SHOES</a></li>
+						<li><a href="/category/etc" onmouseover="this.innerHTML='기타'"
+							onmouseout="this.innerHTML='ETC'">ETC</a></li>
+						<li><a href="/category/sale" onmouseover="this.innerHTML='세일'"
+							onmouseout="this.innerHTML='SALE'">SALE</a></li>
+					</ul>
+					<ul>
+						<li><a href="/category/notice" onmouseover="this.innerHTML='공지'"
+							onmouseout="this.innerHTML='NOTICE'">NOTICE</a></li>
+						<li><a href="/category/qna" onmouseover="this.innerHTML='상품문의'"
+							onmouseout="this.innerHTML='Q&A'">Q&A</a></li>
+						<li><a href="/category/review" onmouseover="this.innerHTML='상품후기'"
+							onmouseout="this.innerHTML='REVIEW'">REVIEW</a></li>
+					</ul>
+					<ul>
+						<li><a href="/category/bycalllim" onmouseover="this.innerHTML='콜림자체제작'"
+							onmouseout="this.innerHTML='MADE BY CALL,LIM'">MADE BY
+								CALL,LIM</a></li>
+						<li><a href="/category/newitem" onmouseover="this.innerHTML='신상품'"
+							onmouseout="this.innerHTML='NEW ITEM'">NEW ITEM</a></li>
+						<li><a href="/category/bestitem" onmouseover="this.innerHTML='베스트상품'"
+							onmouseout="this.innerHTML='BEST ITEM'">BEST ITEM</a></li>
+					</ul>
+				</div>
+				<div id="searchbar">
+					<div class="search">
+					<form >
+						<input type="text" class="searchTerm"> <input type="image"
+							src="${pageContext.request.contextPath}/resources/shop/img/search_icon.png" alt="검색"
+							onclick="searchItem(); return false;">
+					</form>
+					</div>
+				</div>
+			</div>
+		</div>
+ 

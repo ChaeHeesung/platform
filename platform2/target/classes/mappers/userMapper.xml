@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.mapper.UserMapper">
+	
+	<resultMap type="com.platform.domain.UserVO" id="ReturnUserVO">
+		<result column="user_sq" property="no"/>
+		<result column="user_id" property="id"/>
+		<result column="user_pw" property="pw"/>
+		<result column="user_nm" property="name"/>
+	</resultMap>
+	<select id="login" resultMap="ReturnUserVO">
+		SELECT user_id, user_pw, user_nm FROM USER_TB WHERE user_id = #{id} AND user_pw = #{pw}
+	</select>
+	
+	<select id="join">
+		INSERT INTO USER_TB(user_id, user_pw, user_nm, enabled) VALUES( #{id}, #{pw}, #{name}, 1)
+	</select>
+	
+	<select id="joinAuthor">
+		INSERT INTO user_authorities_tb (user_sq, authority) VALUES (#{id}, 'ROLE_USER');
+	</select>
+	
+	<select id="joinGroupMember">
+		INSERT INTO group_members_tb (group_id, user_sq) VALUES ('1', #{id});
+	</select>
+	
+	
+	<select id="checkJoin" resultMap="ReturnUserVO">
+		SELECT user_sq, user_id FROM USER_TB WHERE user_id = #{id}
+	</select>
+	
+</mapper>

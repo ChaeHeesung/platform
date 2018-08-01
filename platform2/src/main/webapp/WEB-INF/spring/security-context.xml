@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans
+	xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd">
+
+
+	<!-- 검사 URL -->
+	<http use-expressions="true" name="main">
+		<csrf disabled="true" />
+		<intercept-url pattern="/loginSecurity" 
+			access="permitAll" />
+		<intercept-url pattern="/admin/**"
+			access="hasRole('ADMIN')" />
+
+
+
+		<!-- DREAM -->
+		<intercept-url pattern="/dream/*" access="permitAll" />
+		<intercept-url pattern="/dream/user/join"
+			access="permitAll" />
+		<intercept-url pattern="/dream/art/artjoinform"
+			access="permitAll" />
+		<intercept-url pattern="/dream/space/spacejoinform"
+			access="permitAll" />
+
+		<intercept-url pattern="/dream/space/**"
+			access="hasRole('DREAM')" />
+		<intercept-url pattern="/**" access="permitAll" />
+
+
+		<form-login login-page="/loginform.do"
+			default-target-url="/logined.do" 
+			authentication-failure-url="/?error#login_form"
+			username-parameter="user_id" password-parameter="user_pw" />
+		<logout logout-url="/logout" logout-success-url="/"/>
+		<access-denied-handler
+			error-page="/checkRegister.do" />
+	</http>
+
+<!-- 
+	<beans:bean id="userDetailsService"
+		class="org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl">
+		<beans:property name="dataSource" ref="dataSource" />
+	</beans:bean>
+ -->
+	<!-- provider -->
+	<!-- 
+	<authentication-manager>
+		<authentication-provider>
+			<jdbc-user-service data-source-ref="dataSource"
+				role-prefix=""
+				users-by-username-query="SELECT USER_TB.user_sq as username, USER_TB.user_pw as password, enabled, authority, user_tb.user_nm FROM USER_TB, AUTHORITIES WHERE USER_TB.user_sq = AUTHORITIES.user_sq and USER_TB.user_id = ?"
+				authorities-by-username-query="select user_sq as username, authority from USER_AUTHORITIES_TB where user_sq = ?"
+				group-authorities-by-username-query="select g.group_id, g.group_name, ga.authority from GROUPS_TB g, GROUP_MEMBERS_TB gm, GROUP_AUTHORITIES_TB ga where gm.user_sq = ? and g.group_id = ga.group_id and g.group_id = gm.group_id" />
+		</authentication-provider>
+	</authentication-manager>
+ -->
+
+	<!-- spring-security.xml -->
+	<authentication-manager>
+		<authentication-provider
+			user-service-ref="memberService">
+		</authentication-provider>
+	</authentication-manager>
+</beans:beans>
