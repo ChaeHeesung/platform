@@ -22,6 +22,12 @@
 		$('#rec').DataTable();
 	});
 </script>
+<style type="text/css">
+img {
+	width: 142px;
+	height: 213px;
+}
+</style>
 </head>
 <body id="main">
 	<nav class="navbar navbar-inverse">
@@ -64,26 +70,24 @@
 		</div>
 	</div>
 	</nav>
-	<table table id="rec" class="table table-hover table-striped table-bordered" style="width: 100%;">
-		<tr>
-			<th class="border-top border-bottom border-left border-right">이미지</th>
-			<th class="border-top border-bottom border-right">도서명</th>
-			<th class="border-top border-bottom border-right">저자</th>
-			<th class="border-top border-bottom border-right">출판사</th>
-			<th class="border-top border-bottom border-right">출판일</th>
-		</tr>
-		<%
-			int i = 0;
-		%>
+	<h2>2018년 7월 3주 베스트셀러</h2>
+	<table table id="rec"
+		class="table table-hover table-striped table-bordered"
+		style="width: 100%;">
 		<c:forEach items="${list}" var="l">
 			<tr>
-				<%
-					i++;
-				%>
-				<td class="border-bottom border-left border-right"><img src="${l.img}"></td>
+				<td width="142px" height="213px" rowspan="4"
+					class="border-bottom border-left border-right"><img
+					src="${l.img}"></td>
 				<td class="border-bottom border-right">${l.title}</td>
+			</tr>
+			<tr>
 				<td class="border-bottom border-right">${l.author}</td>
+			</tr>
+			<tr>
 				<td class="border-bottom border-right">${l.publisher}</td>
+			</tr>
+			<tr>
 				<td class="border-bottom border-right">${l.pdate}</td>
 			</tr>
 		</c:forEach>
