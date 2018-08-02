@@ -49,6 +49,10 @@
 		base-package="com.platform.persistence"></context:component-scan>
 	<context:component-scan
 		base-package="com.platform.service"></context:component-scan>
+	<context:component-scan
+		base-package="com.platform.library.dao"></context:component-scan>
+	<context:component-scan
+		base-package="com.platform.library.service"></context:component-scan>
 	<!-- 
 	<context:component-scan
 		base-package="org.zerock.aop"></context:component-scan>
