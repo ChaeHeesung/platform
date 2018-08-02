@@ -532,7 +532,7 @@ $(function(){
 	$.ajax({
 		
         type : "get",
-        url : "/admin8/getArtJoin",
+        url : "/admin8/dream/getArtJoin",
         async: false,
         success : function(data){
         	$('#artJoinNum').text(data);
@@ -542,7 +542,7 @@ $(function(){
 	$.ajax({
 		
         type : "get",
-        url : "/admin8/getSpaceJoin",
+        url : "/admin8/dream/getSpaceJoin",
         async: false,
         success : function(data){
         	$('#spaceJoinNum').text(data);
@@ -555,7 +555,7 @@ function init_flot_chart() {
 	$.ajax({
 		
         type : "get",
-        url : "/admin8/getJoinStatic",
+        url : "/admin8/dream/getJoinStatic",
         async: false,
         success : function(data){
         	joinStatic = data;

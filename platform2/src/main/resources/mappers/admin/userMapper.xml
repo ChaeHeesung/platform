@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.admin.mapper.StaticMapper">
+	
+	<resultMap type="java.util.HashMap" id="joinStatics">
+		<result column="sumJoin" property="sumJoin" javaType="Integer"/>
+		<result column="joinDate" property="joinDate" javaType="java.lang.String"/>
+	</resultMap>
+	
+	<select id="listStatsJoinUser" resultMap="joinStatics">
+		select count(*) as sumJoin, user_join_dt as joinDate from user_tb where user_join_dt > date_add(now(),interval -28 day) group by DATE_FORMAT(user_tb.USER_JOIN_DT,'%y-%m-%d') ORDER BY user_join_dt;
+	</select>
+	
+	<select id="getArtJoin" resultType="java.lang.String">
+		SELECT count(*) FROM art_user_tb;
+	</select>
+	
+	<select id="getSpaceJoin" resultType="java.lang.String">
+		SELECT count(*) FROM space_user_tb;
+	</select>
+	
+	
+	
+</mapper>
