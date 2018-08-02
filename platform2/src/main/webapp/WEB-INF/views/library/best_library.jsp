@@ -91,6 +91,7 @@ img {
 				<td class="border-bottom border-right">${l.pdate}</td>
 			</tr>
 		</c:forEach>
+		
 	</table>
 </body>
 </html>
