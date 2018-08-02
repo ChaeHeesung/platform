@@ -9,6 +9,14 @@
 	<configs>
 	</configs>
 	<autoconfigs>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/servlet-context-sports.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/servlet-context-safety.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/servlet-context-shop.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/servlet-context-travel.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/servlet-context-dream.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/servlet-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/root-context.xml</config>
+		<config>src/main/webapp/WEB-INF/spring/appServlet/servlet-context-library.xml</config>
 	</autoconfigs>
 	<configSets>
 	</configSets>

@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
-<meta name="_csrf_header" content="${_csrf.headerName}" />
-<meta name="_csrf" content="${_csrf.token}" />
 <style>
 .container input[type="button"] {
     outline: none;
@@ -36,35 +34,55 @@
 }
 </style>
 <script type="text/javascript">
+document.getElementById('contact').focus();
 function goPopup(){
-	var pop = window.open("/dream/jusopopup","pop","width=570,height=420, scrollbars=yes, resizable=yes"); 
+	var pop = window.open("/popup/jusoPopup.jsp","pop","width=570,height=420, scrollbars=yes, resizable=yes"); 
 }
-
-function jusoCallBack(roadAddr,roadAddrDetail, zipNo){
+function jusoCallBack(roadFullAddr,roadAddrPart1,addrDetail,roadAddrPart2,engAddr, jibunAddr, zipNo, admCd, rnMgtSn, bdMgtSn,detBdNmList,bdNm,bdKdcd,siNm,sggNm,emdNm,liNm,rn,udrtYn,buldMnnm,buldSlno,mtYn,lnbrMnnm,lnbrSlno,emdNo){
 	// 팝업페이지에서 주소입력한 정보를 받아서, 현 페이지에 정보를 등록합니다.
-	document.form.roadAddr.value = roadAddr;
-	document.form.roadAddrDetail.value = roadAddrDetail;
+	document.form.addr.value = roadAddrPart1;
+	document.form.addrDetail.value = addrDetail;
 	document.form.zipNo.value = zipNo;
-    var header = $("meta[name='_csrf_header']").attr("content");
-    var token = $("meta[name='_csrf']").attr("content");
-	$.ajax({
-		url : "/dream/getcoordinates"
-		, type : "post"
-		, dataType : 'json'
-		, data : {
-			address : roadAddr
-		}
-		, async : false
-		, beforeSend: function(xhr){
-			xhr.setRequestHeader(header, token);	// 헤드의 csrf meta태그를 읽어 CSRF 토큰 함께 전송
-		}
-		, success : function(data){
-			document.form.coordinateX.value = data.result.items[0].point.x;
-			document.form.coordinateY.value = data.result.items[0].point.y;
-			console.log(data);
-			console.log(data.result.items[0].point.x);
-		}
+	console.log(sggNm);
+	$(function(){
+	  	$.ajax({
+	        type : "POST",
+	        url : "/selectDongCD",
+	        data : {
+	        	sigungu_nm : sggNm,
+	        	dong_nm : emdNm
+	        }, 
+	        success : function(data){
+	        	console.log(data);
+	        	document.form.dong_cd.value = data.dong_cd;
+	        }
+		})
+		
+	 
+		// 좌표 값 구하기
+	    // var header = $("meta[name='_csrf_header']").attr("content");
+	    // var token = $("meta[name='_csrf']").attr("content");
+		$.ajax({
+			url : "/dream/getcoordinates"
+			, type : "post"
+			, dataType : 'json'
+			, data : {
+				address : roadAddrPart1
+			}
+			, async : false
+			// , beforeSend: function(xhr){
+			//	xhr.setRequestHeader(header, token);	// 헤드의 csrf meta태그를 읽어 CSRF 토큰 함께 전송
+			//}
+			, success : function(data){
+				console.log(data);
+				document.form.coordinateX.value = data.result.items[0].point.x;
+				document.form.coordinateY.value = data.result.items[0].point.y;
+				console.log(data);
+				console.log(data.result.items[0].point.x);
+			}
+		})
 	})
+
 }
 
 
@@ -155,7 +173,7 @@ function jusoCallBack(roadAddr,roadAddrDetail, zipNo){
 					</div>
 					<div style="width: 100%; float: left;">
 						<input type="file"><br>
-						<table style="width: 100%; height: 300px">
+						<table style="width: 100%;" border="1">
 							<thead>
 								<tr>
 									<td style="width: 15%">선택</td>
@@ -172,15 +190,18 @@ function jusoCallBack(roadAddr,roadAddrDetail, zipNo){
 							</tbody>
 						</table>
 					</div>
-					<div style="width: 100%; float: left;"><input type="text" id="zipNo" name="zipNo" placeholder="우편번호" style="width: 15%;" >&nbsp;&nbsp;&nbsp;&nbsp;<button onclick="goPopup()" value="팝업_domainChk">우편번호 찾기</button></div>
-					<input type="text" id="roadAddr" name="roadAddr" placeholder="주소" style="width: 40%">
-					<input type="text" id="roadAddrDetail" name="roadAddrDetail" placeholder="상세주소" style="width: 60%">
+					<div style="width: 100%; float: left;"><input type="text" id="zipNo" name="zipNo" placeholder="우편번호" style="width: 15%;" >&nbsp;&nbsp;&nbsp;&nbsp;<button onclick="goPopup()" value="팝업_domainChk" type="button">우편번호 찾기</button></div>
+					<input type="text" id="addr" name="addr" placeholder="주소" style="width: 40%">
+					<input type="text" id="addrDetail" name="addrDetail" placeholder="상세주소" style="width: 60%">
+					<input type="hidden" id="sigungu_nm" name="sigungu_nm">
+					<input type="hidden" id="dong_cd" name="dong_cd">
+					
 					<input type="hidden" id="coordinateX" name="coordinateX">
 					<input type="hidden" id="coordinateY" name="coordinateY">
 					
-					<textarea placeholder="내용" name="Message" required=""></textarea>
+					<textarea placeholder="내용" name="Message"></textarea>
 					<input type="submit" value="SUBMIT">
-				</form>  
+				</form>
 			</div>
 		</div>
 	</div>

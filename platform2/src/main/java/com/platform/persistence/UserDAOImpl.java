@@ -1,5 +1,7 @@
 package com.platform.persistence;
 
+import java.util.HashMap;
+
 import javax.inject.Inject;
 
 import org.apache.ibatis.session.SqlSession;
@@ -25,14 +27,22 @@ public class UserDAOImpl implements UserDAO{
 	}
 	
 	@Override
-	public void joinGroupMember(int user_sq) throws Exception {
-		session.insert(namespace + ".joinGroupMember", user_sq);
+	public void joinGroupMember(int user_sq, int group_id) throws Exception {
+		HashMap<String, String> map = new HashMap<>();
+		map.put("user_sq", String.valueOf(user_sq));
+		map.put("group_id", String.valueOf(group_id));
+		
+		
+		session.insert(namespace + ".joinGroupMember", map);
 		
 	}
 	
 	@Override
-	public void joinAuthor(int user_sq) throws Exception {
-		session.insert(namespace + ".joinAuthor", user_sq);
+	public void joinAuthor(int user_sq, String authority) throws Exception {
+		HashMap<String, Object> map = new HashMap<>();
+		map.put("user_sq", user_sq);
+		map.put("authority", authority);
+		session.insert(namespace + ".joinAuthor", map);
 	}
 
 	@Override

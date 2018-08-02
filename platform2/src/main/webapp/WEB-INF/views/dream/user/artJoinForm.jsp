@@ -32,31 +32,81 @@ $(function(){
 	
 	
 	$('#emailDomainS').change(function(){
-		$('input[id=emailDomain]').attr('value',this.value);
+		$('input[id=emailDomaina]').attr('value',this.value);
+		if(this.value == "naver.com") {
+			$('input[id=emailDomain]').attr('value',1);
+		}
+		if(this.value == "hanmail.net") {
+			$('input[id=emailDomain]').attr('value',2);
+		}
+		if(this.value == "nate.com") {
+			$('input[id=emailDomain]').attr('value',3);
+		}
+		if(this.value == "daum.net") {
+			$('input[id=emailDomain]').attr('value',4);
+		}
+		if(this.value == "hotmail.com") {
+			$('input[id=emailDomain]').attr('value',5);
+		}
+		if(this.value == "dreamwiz.com") {
+			$('input[id=emailDomain]').attr('value',6);
+		}
+		if(this.value == "gmail.com") {
+			$('input[id=emailDomain]').attr('value',7);
+		} else {
+			$('input[id=emailDomain]').attr('value',1);
+		}
+		
 	})
+	
+	
 	
 	
 })
 
 function checkId(){
 	var frm = $("#joinFrm")[0];
-	var user_id = frm.user_id.value;
+	var id = frm.id.value;
 	$.ajax({
 		
-        type : "GET",
-        url : "checkJoin",
+        type : "POST",
+        url : "/checkJoin",
         async: false,
         data : {
-        	user_id : user_id
+        	id : id
         },
         success : function(data){
         	if(data == true) {
-        		frm.submit();
+        		$('#checkIdText').css("visibility", "visible");
+            	$('#checkIdText').text("사용가능한 아이디입니다.");
         	} else {
-            	$('#joinFalseText').css("visibility", "visible");
+        		$('#checkIdText').css("visibility", "visible");
+        		$('#checkIdText').text("중복된 아이디입니다.");
         	}
         }
 	})
+}
+
+function checkForm(){
+	
+	var frm = $("#joinFrm")[0];
+	var checkedId = frm.checkedId.value;
+	var pw = frm.pw.value;
+	var pw2 = frm.pw2.value;
+
+	if(checkedId == "false") {
+		return false;
+	}
+	
+	if(pw != pw2) {
+		alert('비밀번호가 다릅니다.');
+		return false;
+	}
+	
+	
+	return true;
+	
+	
 }
 
 $(function(){
@@ -73,16 +123,61 @@ $(function(){
             success : function(data){
             	
             	console.log(data);
-            	$('#guCode').empty
+            	$('#guCode option').remove();
+            	$('#guCode').append("<option value=''>" + "시·군·구" + "</option>");
             	$.each(data, function(index, item){
-            		$('#guCode').append("<option value='" + index +"'>" + item + "</option>");
+            		$('#guCode').append("<option value='" + item.sigungu_cd +"'>" + item.sigungu_nm + "</option>");
             	})
             }
         });
 	});
 	
-	
+	$('#guCode').change(function(){
+		
+        $.ajax({
+            
+            type : "POST",
+            url : "/getDong",
+            data : {
+            	sigungu_cd : $(this).val()
+            },
+            success : function(data){
+            	
+            	console.log(data);
+            	$('#dongCode option').remove();
+            	$('#dongCode').append("<option value=''>" + "동·읍·면" + "</option>");
+            	$.each(data, function(index, item){
+            		$('#dongCode').append("<option value='" + item.dong_cd +"'>" + item.dong_nm + "</option>");
+            	})
+            }
+        });
+	});
 })
+
+function formSubmit(){
+	var frm = $("#joinFrm")[0];
+	var checkedId = frm.checkedId.value;
+	var pw = frm.pw.value;
+	var pw2 = frm.pw2.value;
+
+	if(checkedId == "false") {
+		return null;
+	}
+	
+	if(pw != pw2) {
+		alert('비밀번호가 다릅니다.');
+		return null;
+	}
+	
+	
+	var birthYear = frm.birthYear.value;
+	var birthMonth = frm.birthMonth.value;
+	var birthDay = frm.birthDay.value;
+	
+	var birth = new Date(birthYear, birthMonth, birthDay);
+	frm.birth.value = birth;
+	frm.submit();
+}
 </script>
 <body id="">
     	<div id="accessibility">
@@ -97,7 +192,7 @@ $(function(){
 		<div id="header">
 			<div id="gnb">
 				<h1>
-					<a href="/"><span style="color: black;">그꿈전공생</span></a>
+					<a href="/dream/"><span style="color: black;">그꿈전공생</span></a>
 
 				</h1>
 
@@ -128,7 +223,7 @@ $(function(){
         <h1>예술전공생 회원 가입</h1>
         <input type="hidden" name="historyCert" id="historyCert">
 
-<form action="/dream/user/artjoin" id="joinFrm" method="post" name="joinFrm">
+			<form action="/dream/user/artjoin" id="joinFrm" method="post" name="joinFrm" onsubmit="return checkForm()">
             <div class="inner">
                 <div class="user_join_agree">
                     <input type="checkbox" name="user_all_agree" id="agreeChkAll" value=""><label for="agreeChkAll">가입 전체약관 및 안내정보 수신에 동의합니다.</label>
@@ -530,22 +625,24 @@ $(function(){
                                 <tr>
                                     <th>아이디</th>
                                     <td>
-                                        <input type="text" name="id" id="id" class="tBox tPwd" maxlength="16" placeholder="6~16자 영문, 숫자" title="아이디" <sec:authorize access="isAuthenticated()">value="<sec:authentication property="principal.id"/>" readonly="readonly"</sec:authorize> >
-                                        <input type="button" value="중복확인" style="width: 80px; height: 32px; padding-left: 5px" onclick="checkId()"><a>아이디가 중복됩니다.</a>
+                                        <input type="text" name="id" id="id" class="tBox tPwd" maxlength="16" placeholder="6~16자 영문, 숫자" title="아이디" required="required" <sec:authorize access="isAuthenticated()">value="<sec:authentication property="principal.id"/>" readonly="readonly"</sec:authorize> >
+                                        <input type="button" value="중복확인" style="width: 80px; height: 32px; padding-left: 5px" onclick="checkId()">
+                                        <input type="hidden" <sec:authorize access="isAuthenticated()">value="<sec:authentication property="principal.id"/>" readonly="readonly"</sec:authorize> id="checkedId"  >
+                                        <div><a id="checkIdText" style="visibility: hidden; color: red;">아이디가 중복됩니다.</a></div>
                                         <p class="compul"></p>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>비밀번호 <span class="iconPwdQues" id="dev_pwd_help_icon"></span></a></th>
                                     <td>
-                                        <input type="password" name="pw" class="tBox tPwd" id="pw" maxlength="16" placeholder="6~16자 영문, 숫자, 특수문자" title="비밀번호">
+                                        <input type="password" name="pw" class="tBox tPwd" id="pw" maxlength="16" placeholder="6~16자 영문, 숫자, 특수문자" title="비밀번호" required="required">
                                         <p class="compul" id="PwdSafeResult"></p>
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>비밀번호 확인</th>
                                     <td>
-                                        <input type="password" name="pw2" id="pw2" class="tBox tPwd" maxlength="16" title="비밀번호확인">
+                                        <input type="password" name="pw2" id="pw2" class="tBox tPwd" maxlength="16" title="비밀번호확인" required="required">
                                         <p class="compul" id="dev_chk_pwd_confirm"></p>
                                     </td>
                                 </tr>
@@ -555,7 +652,7 @@ $(function(){
                                 <tr>
                                     <th>이름</th>
                                     <td>
-                                        <input type="text" name="name" class="tBox" title="이름" id="dev_u_name" maxlength="12" value="<sec:authorize access="isAuthenticated()"><sec:authentication property="principal.name"/></sec:authorize>">
+                                        <input type="text" name="name" class="tBox" title="이름" id="dev_u_name" maxlength="12" required="required" value="<sec:authorize access="isAuthenticated()"><sec:authentication property="principal.name"/></sec:authorize>">
                                         <p class="compul"></p>
                                     </td>
                                 </tr>
@@ -683,7 +780,7 @@ $(function(){
                                                 <option value="30">30일</option>
                                         </select>
                                         <p class="compul" id="txtBirth"></p>
-                                        <input id="dev_birthChkStat" name="dev_birthChkStat" type="hidden" value="">
+                                        <input id="birth" name="birth" type="hidden" value="">
                                     </td>
                                 </tr>
                                 <tr>
@@ -695,9 +792,39 @@ $(function(){
                                     </td>
                                 </tr>
                                 <tr>
+                                    <th>예술분야</th>
+                                    <td>
+                                        <input type="checkbox" name="artField" class="sex" title="동양화"  value="1"><label for="sex_male">동양화</label>
+                                        <input type="checkbox" name="artField" class="sex female" title="서양화" value="2"><label for="sex_female">서양화</label>
+                                        <input type="checkbox" name="artField" class="sex female" title="회화"  value="3"><label for="sex_female">회화</label>
+                                        <input type="checkbox" name="artField" class="sex female" title="조소" value="4"><label for="sex_female">조소</label>
+                                        <input type="checkbox" name="artField" class="sex female" title="애니메이션" value="5"><label for="sex_female">애니메이션</label><br>
+                                        <input type="checkbox" name="artField" class="sex" title="디자인" value="6"><label for="sex_female">디자인</label>
+                                        <input type="checkbox" name="artField" class="sex female" title="시각디자인" value="7"><label for="sex_female">시각디자인</label>
+                                        <input type="checkbox" name="artField" class="sex female" title="패션디자인" value="8"><label for="sex_female">패션디자인</label>
+                                        <input type="checkbox" name="artField" class="sex female" title="산업디자인" value="9"><label for="sex_female">산업디자인</label>
+                                        <p class="compul" id="txtGender"></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                	<th>희망전시공간</th>
+                                    <td>
+                                        <input type="checkbox" name="spaceField" class="sex" title="전시관" value="1"><label for="sex_male">전시관</label>
+                                        <input type="checkbox" name="spaceField" class="sex female" title="카페" value="2"><label for="sex_female">카페</label>
+                                        <input type="checkbox" name="spaceField" class="sex female" title="레스토랑" value="3"><label for="sex_female">레스토랑</label>
+                                        <input type="checkbox" name="spaceField" class="sex female" title="이자카야" value="4"><label for="sex_female">이자카야</label>
+                                        <input type="checkbox" name="spaceField" class="sex female" title="기타" value="5"><label for="sex_female">기타</label>
+                                        
+                                        <p class="compul" id="txtGender"></p>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <th>이메일</th>
                                     <td>
-                                        <input type="text" name="emailId" class="tBox tEmail" id="emailId" maxlength="25" title="이메일아이디"> <span>@</span> <input type="text" name="emailDomain" class="tBox tEmail" id="emailDomain" maxlength="25" title="이메일계정" onfocus="$mship.reg.emailChk1()">
+                                        <input type="text" name="emailId" class="tBox tEmail" id="emailId" maxlength="25" title="이메일아이디" required="required"> <span>@</span> 
+                                        <input type="text" name="emailDomaina" class="tBox tEmail" id="emailDomaina" maxlength="25" title="이메일계정" onfocus="$mship.reg.emailChk1()">
+                                        <input type="hidden" name="emailDomain" id="emailDomain" value="">
+                                        
                                         <select name="emailDomainS" class="tBox joinBx tEmail" id="emailDomainS" title="이메일 서비스업체 선택">
                                             <option value="">선택하세요</option>
                                             <option value="naver.com">naver.com</option>
@@ -719,19 +846,16 @@ $(function(){
                                     <th>휴대폰 번호</th>
                                     <td>
                                         <select name="phone1" class="tBox joinBx tPhone" id="phone1" title="휴대폰 번호">
-                                            <option value="010">010</option>
-                                            <option value="011">011</option>
-                                            <option value="016">016</option>
-                                            <option value="017">017</option>
-                                            <option value="018">018</option>
-                                            <option value="019">019</option>
+                                            <option value="1">010</option>
+                                            <option value="2">011</option>
+                                            <option value="3">016</option>
+                                            <option value="4">017</option>
+                                            <option value="5">018</option>
+                                            <option value="6">019</option>
                                         </select> -
-                                        <input type="text" name="phone2" id="phone2" maxlength="4" class="tBox tPhone" title="휴대폰 번호"> -
-                                        <input type="text" name="phone3" id="phone3" maxlength="4" class="tBox tPhone" title="휴대폰 번호">
-                                        <img src="https://contents.albamon.kr/monimg/common/btn/btn_confirm.png" alt="인증번호 받기" id="btnCert">
+                                        <input type="text" name="phone2" id="phone2" maxlength="4" class="tBox tPhone" title="휴대폰 번호" required="required"> -
+                                        <input type="text" name="phone3" id="phone3" maxlength="4" class="tBox tPhone" title="휴대폰 번호" required="required">
 
-                                        <input type="text" name="dev_CertNo" title="인증번호" class="tBox tConfirmNum" id="dev_CertNo" maxlength="20">
-                                        <img class="btnConfirmNum" src="https://contents.albamon.kr/monimg/common/btn/btn_confirm_ok.png" alt="확인" id="btnCertSubmit">
                                         <p class="compul" id="txtCert"></p>
                                         <input id="dev_phoneChkStat" name="dev_phoneChkStat" type="hidden" value="">
                                         <input id="dev_certChkStat" name="dev_certChkStat" type="hidden" value="">
@@ -830,7 +954,7 @@ $(function(){
                 </div>
                 <div class="info_confirm" id="boxJoinConfirm" style="display: none;">입력한 정보를 다시 확인해주세요.</div>
                 <div class="btnBx">
-                    <a href="#" id="btn_submit"><img src="https://contents.albamon.kr/monimg/common/btn/btn_user_join.png" alt="가입하기"></a>
+                    <a href="#" id="btn_submit" onclick="formSubmit()"><img src="https://contents.albamon.kr/monimg/common/btn/btn_user_join.png" alt="가입하기"></a>
                 </div>
             </div>
         <!-- 회원가입폼 끝 //-->

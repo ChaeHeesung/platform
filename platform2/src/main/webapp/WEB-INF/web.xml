@@ -134,7 +134,22 @@
 		<url-pattern>/travel/*</url-pattern>
 	</servlet-mapping>
 
+	<!-- Admin servlet-context -->
+	<servlet>
+		<servlet-name>appServlet8</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/appServlet/servlet-context-admin.xml</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
 
+	<servlet-mapping>
+		<servlet-name>appServlet8</servlet-name>
+		<url-pattern>/admin8/*</url-pattern>
+	</servlet-mapping>
+	
 	<!-- Encoding UTF-8 설정 -->
 	<filter>
 		<filter-name>encoding</filter-name>

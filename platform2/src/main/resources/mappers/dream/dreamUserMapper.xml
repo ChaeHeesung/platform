@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dream.mapper.UserMapper">
+	
+	<resultMap type="com.platform.domain.UserVO" id="ReturnUserVO">
+		<result column="user_sq" property="no"/>
+		<result column="user_id" property="id"/>
+		<result column="user_pw" property="pw"/>
+		<result column="user_nm" property="name"/>
+	</resultMap>
+	
+	<select id="artJoin">
+		INSERT INTO ART_USER_TB(user_sq, at_user_birth_dt, gender_gb, email_gb, at_user_email, phone_cd, at_user_mphone, at_user_ephone, dong_cd, at_user_change) 
+		VALUES(#{no}, #{birth}, #{gender}, #{emailDomain}, #{emailId}, #{phone1}, #{phone2}, #{phone3}, #{dongCode}, 500)
+	</select>
+
+	<select id="artMajorJoin">
+		INSERT INTO ART_USER_MAJOR_TB(USER_SQ, AT_GOODS_FIELD_CD)
+		VALUES(#{user_sq}, #{at_goods_field_cd})
+	</select>
+	
+	<select id="spaceJoin">
+		INSERT INTO SPACE_USER_TB(user_sq, sp_user_birth_dt, gender_gb, email_gb, sp_field_cd, sp_user_email, phone_cd, sp_user_mphone, sp_user_ephone, dong_cd, sp_user_addrd, sp_user_change, tel_cd, sp_user_mtel, sp_user_etel, sp_user_xaddr, sp_user_yaddr) 
+		VALUES(#{no}, #{birth}, #{gender}, #{emailDomain}, #{spaceField}, #{emailId},  #{phone1}, #{phone2}, #{phone3}, #{dong_cd}, #{addrDetail}, 500, #{tel_cd}, #{tel2}, #{tel3}, #{coordinateX}, #{coordinateY})
+	</select>
+	
+	<select id="artWish">
+		INSERT INTO SPACE_WISH_ART_TB(USER_SQ, AT_GOODS_FIELD_CD)
+		VALUES(#{user_sq}, #{at_goods_field_cd})
+	</select>
+	
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

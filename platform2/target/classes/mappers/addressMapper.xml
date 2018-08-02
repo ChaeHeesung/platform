@@ -5,8 +5,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <mapper namespace="com.platform.mapper.AddressMapper">
 	
-	<select id="getSigungu" resultType="String">
-		SELECT sigungu_nm FROM SIGUNGU_TB WHERE sido_cd = #{value}
+	<select id="getSigungu" resultType="AddressVO">
+		SELECT sigungu_nm, sigungu_cd FROM SIGUNGU_TB WHERE sido_cd = #{value};
 	</select>
+	
+	<select id="getDong" resultType="AddressVO">
+		SELECT dong_cd, dong_nm FROM DONG_TB WHERE sigungu_cd = #{value};
+	</select>
+	
+	<select id="selectDongCD" resultType="AddressVO">
+		SELECT dong_cd FROM dong_tb 
+		LEFT OUTER JOIN sigungu_tb ON
+		sigungu_tb.SIGUNGU_CD = dong_tb.SIGUNGU_CD
+		LEFT OUTER JOIN sido_tb ON
+		sigungu_tb.SIDO_CD = sido_tb.SIDO_CD
+		WHERE dong_tb.dong_nm = #{dong_nm} AND sigungu_tb.sigungu_nm = #{sigungu_nm};
+		
+	</select>
+	
+	
 	
 </mapper>

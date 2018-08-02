@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>	
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,8 +25,170 @@
 
     <link rel="shortcut icon" href="/favicon.ico">
     <link rel="stylesheet" type="text/css" href="https://contents.albamon.kr/css/ver_1/join_style.css?636666694483460463">
+<script src="/resources/js/jquery-3.2.1.min.js"></script>
+<script type="text/javascript">
+
+function goPopup(){
+	var pop = window.open("/popup/jusoPopup.jsp","pop","width=570,height=420, scrollbars=yes, resizable=yes"); 
+}
+function jusoCallBack(roadFullAddr,roadAddrPart1,addrDetail,roadAddrPart2,engAddr, jibunAddr, zipNo, admCd, rnMgtSn, bdMgtSn,detBdNmList,bdNm,bdKdcd,siNm,sggNm,emdNm,liNm,rn,udrtYn,buldMnnm,buldSlno,mtYn,lnbrMnnm,lnbrSlno,emdNo){
+	// 팝업페이지에서 주소입력한 정보를 받아서, 현 페이지에 정보를 등록합니다.
+	document.joinFrm.addr.value = roadAddrPart1;
+	document.joinFrm.addrDetail.value = addrDetail;
+	document.joinFrm.zipNo.value = zipNo;
+	console.log(sggNm);
+	$(function(){
+	  	$.ajax({
+	        type : "POST",
+	        url : "/selectDongCD",
+	        data : {
+	        	sigungu_nm : sggNm,
+	        	dong_nm : emdNm
+	        }, 
+	        success : function(data){
+	        	//console.log(data);
+	        	document.joinFrm.dong_cd.value = data.dong_cd;
+	        }
+		})
+		
+	 
+		// 좌표 값 구하기
+	    // var header = $("meta[name='_csrf_header']").attr("content");
+	    // var token = $("meta[name='_csrf']").attr("content");
+		$.ajax({
+			url : "/dream/getcoordinates"
+			, type : "post"
+			, dataType : 'json'
+			, data : {
+				address : jibunAddr
+			}
+			, async : false
+			// , beforeSend: function(xhr){
+			//	xhr.setRequestHeader(header, token);	// 헤드의 csrf meta태그를 읽어 CSRF 토큰 함께 전송
+			//}
+			, success : function(data){
+				console.log(data);
+				document.joinFrm.coordinateX.value = data.result.items[0].point.x;
+				document.joinFrm.coordinateY.value = data.result.items[0].point.y;
+				//console.log(data);
+				//console.log(data.result.items[0].point.x);
+			}
+		})
+	})
+
+}
 
 
+
+
+
+$(function(){
+	
+	
+	$('#emailDomainS').change(function(){
+		$('input[id=emailDomaina]').attr('value',this.value);
+		if(this.value == "naver.com") {
+			$('input[id=emailDomain]').attr('value',1);
+		}
+		if(this.value == "hanmail.net") {
+			$('input[id=emailDomain]').attr('value',2);
+		}
+		if(this.value == "nate.com") {
+			$('input[id=emailDomain]').attr('value',3);
+		}
+		if(this.value == "daum.net") {
+			$('input[id=emailDomain]').attr('value',4);
+		}
+		if(this.value == "hotmail.com") {
+			$('input[id=emailDomain]').attr('value',5);
+		}
+		if(this.value == "dreamwiz.com") {
+			$('input[id=emailDomain]').attr('value',6);
+		}
+		if(this.value == "gmail.com") {
+			$('input[id=emailDomain]').attr('value',7);
+		} else {
+			$('input[id=emailDomain]').attr('value',1);
+		}
+		
+	})
+	
+	
+	
+	
+})
+
+function checkId(){
+	var frm = $("#joinFrm")[0];
+	var id = frm.id.value;
+	$.ajax({
+		
+        type : "POST",
+        url : "/checkJoin",
+        async: false,
+        data : {
+        	id : id
+        },
+        success : function(data){
+        	if(data == true) {
+        		$('#checkIdText').css("visibility", "visible");
+            	$('#checkIdText').text("사용가능한 아이디입니다.");
+        	} else {
+        		$('#checkIdText').css("visibility", "visible");
+        		$('#checkIdText').text("중복된 아이디입니다.");
+        	}
+        }
+	})
+}
+
+function checkForm(){
+	
+	var frm = $("#joinFrm")[0];
+	var checkedId = frm.checkedId.value;
+	var pw = frm.pw.value;
+	var pw2 = frm.pw2.value;
+
+	if(checkedId == "false") {
+		return false;
+	}
+	
+	if(pw != pw2) {
+		alert('비밀번호가 다릅니다.');
+		return false;
+	}
+	
+	
+	return true;
+	
+	
+}
+
+
+function formSubmit(){
+	var frm = $("#joinFrm")[0];
+	var checkedId = frm.checkedId.value;
+	var pw = frm.pw.value;
+	var pw2 = frm.pw2.value;
+
+	if(checkedId == "false") {
+		return null;
+	}
+	
+	if(pw != pw2) {
+		alert('비밀번호가 다릅니다.');
+		return null;
+	}
+	
+	
+	var birthYear = frm.birthYear.value;
+	var birthMonth = frm.birthMonth.value;
+	var birthDay = frm.birthDay.value;
+	
+	var birth = new Date(birthYear, birthMonth, birthDay);
+	frm.birth.value = birth;
+	frm.submit();
+}
+</script>
 <body id="">
     	<div id="accessibility">
 		<p>
@@ -37,7 +202,7 @@
 		<div id="header">
 			<div id="gnb">
 				<h1>
-					<a href="/"><span style="color: black;">그꿈전공생</span></a>
+					<a href="/dream/"><span style="color: black;">그꿈전공생</span></a>
 
 				</h1>
 
@@ -68,7 +233,7 @@
         <h1>공간전공생 회원 가입</h1>
         <input type="hidden" name="historyCert" id="historyCert">
 
-<form action="/Account/regist/write-proc" id="frm-reg" method="post" name="frm-reg"><input id="dev_Ident_e" name="UserIdentE" type="hidden" value=""><input id="dev_certGubun" name="CertPathType" type="hidden" value="GGREG"><input id="dev_db_name" name="DbName" type="hidden" value="GG"><input id="dev_u_ident" name="UserIdent" type="hidden" value=""><input id="dev_cert_idx" name="CertIndex" type="hidden" value=""><input id="MemberType" name="MemberType" type="hidden" value="M">        <!--// 동의 -->
+			<form action="/dream/user/spacejoin" id="joinFrm" method="post" name="joinFrm" onsubmit="return checkForm()">
             <div class="inner">
                 <div class="user_join_agree">
                     <input type="checkbox" name="user_all_agree" id="agreeChkAll" value=""><label for="agreeChkAll">가입 전체약관 및 안내정보 수신에 동의합니다.</label>
@@ -470,24 +635,24 @@
                                 <tr>
                                     <th>아이디</th>
                                     <td>
-                                        <input type="text" name="UserId" id="dev_idchk" class="tBox tPwd" maxlength="16" placeholder="6~16자 영문, 숫자" title="아이디">
+                                        <input type="text" name="id" id="id" class="tBox tPwd" maxlength="16" placeholder="6~16자 영문, 숫자" title="아이디" required="required" <sec:authorize access="isAuthenticated()">value="<sec:authentication property="principal.id"/>" readonly="readonly"</sec:authorize> >
+                                        <input type="button" value="중복확인" style="width: 80px; height: 32px; padding-left: 5px" onclick="checkId()">
+                                        <input type="hidden" <sec:authorize access="isAuthenticated()">value="<sec:authentication property="principal.id"/>" readonly="readonly"</sec:authorize> id="checkedId"  >
+                                        <div><a id="checkIdText" style="visibility: hidden; color: red;">아이디가 중복됩니다.</a></div>
                                         <p class="compul"></p>
-                                        <input id="dev_idchkStat" name="dev_idchkStat" type="hidden" value="">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>비밀번호 <a href="javascript:;"><span class="iconPwdQues" id="dev_pwd_help_icon"></span></a></th>
+                                    <th>비밀번호 <span class="iconPwdQues" id="dev_pwd_help_icon"></span></a></th>
                                     <td>
-                                        <input type="password" name="UserPwd" class="tBox tPwd" id="dev_pwd1" maxlength="16" placeholder="6~16자 영문, 숫자, 특수문자" title="비밀번호">
-                                        <input type="hidden" name="birthcheck" id="dev_birthcheck" value="">
+                                        <input type="password" name="pw" class="tBox tPwd" id="pw" maxlength="16" placeholder="6~16자 영문, 숫자, 특수문자" title="비밀번호" required="required">
                                         <p class="compul" id="PwdSafeResult"></p>
-                                        <input id="dev_pwdchkStat" name="dev_pwdchkStat" type="hidden" value="">
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>비밀번호 확인</th>
                                     <td>
-                                        <input type="password" name="UserPwd2" id="dev_pwconfirm" class="tBox tPwd" maxlength="16" title="비밀번호확인">
+                                        <input type="password" name="pw2" id="pw2" class="tBox tPwd" maxlength="16" title="비밀번호확인" required="required">
                                         <p class="compul" id="dev_chk_pwd_confirm"></p>
                                     </td>
                                 </tr>
@@ -497,15 +662,14 @@
                                 <tr>
                                     <th>이름</th>
                                     <td>
-                                        <input type="text" name="Name" class="tBox" title="이름" id="dev_u_name" maxlength="12">
+                                        <input type="text" name="name" class="tBox" title="이름" id="dev_u_name" maxlength="12" required="required" value="<sec:authorize access="isAuthenticated()"><sec:authentication property="principal.name"/></sec:authorize>">
                                         <p class="compul"></p>
-                                        <input id="dev_namechkStat" name="dev_namechkStat" type="hidden" value="">
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>생년월일</th>
                                     <td>
-                                        <select class="tBox joinBx tBirth_yy" data-val="true" data-val-number="SelectedBirthYearValue 필드는 숫자여야 합니다." data-val-required="SelectedBirthYearValue 필드가 필요합니다." id="dev_born_year" name="SelectedBirthYearValue" title="생년월일 연도"><option value="">년</option>
+                                        <select class="tBox joinBx tBirth_yy" data-val="true" data-val-number="SelectedBirthYearValue 필드는 숫자여야 합니다." data-val-required="SelectedBirthYearValue 필드가 필요합니다." id="birthYear" name="birthYear" title="생년월일 연도"><option value="">년</option>
 <option value="2003">2003년</option>
 <option value="2002">2002년</option>
 <option value="2001">2001년</option>
@@ -577,7 +741,7 @@
 <option value="1935">1935년</option>
 <option value="1934">1934년</option>
 </select>
-                                        <select name="BirthMonth" class="tBox joinBx tBirth_mm" id="dev_born_month" title="생년월일 월">
+                                        <select name="birthMonth" class="tBox joinBx tBirth_mm" id="birthMonth" title="생년월일 월">
                                             <option value="">월</option>
                                                 <option value="01">01월</option>
                                                 <option value="02">02월</option>
@@ -592,26 +756,87 @@
                                                 <option value="11">11월</option>
                                                 <option value="12">12월</option>
                                         </select>
-                                        <select name="BirthDay" class="tBox joinBx tBirth_mm" id="dev_born_day" title="생년월일 일">
-                                            <option value="">일</option>
+                                        <select name="birthDay" class="tBox joinBx tBirth_mm" id="birthDay" title="생년월일 일">
+                                        	<option value="">일</option>
+                                                <option value="01">01일</option>
+                                                <option value="02">02일</option>
+                                                <option value="03">03일</option>
+                                                <option value="04">04일</option>
+                                                <option value="05">05일</option>
+                                                <option value="06">06일</option>
+                                                <option value="07">07일</option>
+                                                <option value="08">08일</option>
+                                                <option value="09">09일</option>
+                                                <option value="10">10일</option>
+                                                <option value="11">11일</option>
+                                                <option value="12">12일</option>
+                                                <option value="13">13일</option>
+                                                <option value="14">14일</option>
+                                                <option value="15">15일</option>
+                                                <option value="16">16일</option>
+                                                <option value="17">17일</option>
+                                                <option value="18">18일</option>
+                                                <option value="19">19일</option>
+                                                <option value="20">20일</option>
+                                                <option value="21">21일</option>
+                                                <option value="22">22일</option>
+                                                <option value="23">23일</option>
+                                                <option value="24">24일</option>
+                                                <option value="25">25일</option>
+                                                <option value="26">26일</option>
+                                                <option value="27">27일</option>
+                                                <option value="28">28일</option>
+                                                <option value="29">29일</option>
+                                                <option value="30">30일</option>
                                         </select>
                                         <p class="compul" id="txtBirth"></p>
-                                        <input id="dev_birthChkStat" name="dev_birthChkStat" type="hidden" value="">
+                                        <input id="birth" name="birth" type="hidden" value="">
                                     </td>
                                 </tr>
                                 <tr>
                                     <th>성별</th>
                                     <td>
-                                        <input type="radio" name="Gender" class="sex" title="남자" id="sex_male" value="0"><label for="sex_male">남자</label>
-                                        <input type="radio" name="Gender" class="sex female" title="여자" id="sex_female" value="1"><label for="sex_female">여자</label>
+                                        <input type="radio" name="gender" class="sex" title="남자" id="gender_male" value="1"><label for="sex_male">남자</label>
+                                        <input type="radio" name="gender" class="sex female" title="여자" id="gender_female" value="2"><label for="sex_female">여자</label>
                                         <p class="compul" id="txtGender"></p>
                                     </td>
                                 </tr>
                                 <tr>
+                                	<th>전시공간분류</th>
+                                    <td>
+                                        <input type="radio" name="spaceField" class="sex" title="전시관" value="1"><label for="sex_male">전시관</label>
+                                        <input type="radio" name="spaceField" class="sex female" title="카페" value="2"><label for="sex_female">카페</label>
+                                        <input type="radio" name="spaceField" class="sex female" title="레스토랑" value="3"><label for="sex_female">레스토랑</label>
+                                        <input type="radio" name="spaceField" class="sex female" title="이자카야" value="4"><label for="sex_female">이자카야</label>
+                                        <input type="radio" name="spaceField" class="sex female" title="기타" value="5"><label for="sex_female">기타</label>
+                                        
+                                        <p class="compul" id="txtGender"></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>희망예술분야</th>
+                                    <td>
+                                        <input type="checkbox" name="artField" class="sex" title="동양화"  value="1"><label for="sex_male">동양화</label>
+                                        <input type="checkbox" name="artField" class="sex female" title="서양화" value="2"><label for="sex_female">서양화</label>
+                                        <input type="checkbox" name="artField" class="sex female" title="회화"  value="3"><label for="sex_female">회화</label>
+                                        <input type="checkbox" name="artField" class="sex female" title="조소" value="4"><label for="sex_female">조소</label>
+                                        <input type="checkbox" name="artField" class="sex female" title="애니메이션" value="5"><label for="sex_female">애니메이션</label><br>
+                                        <input type="checkbox" name="artField" class="sex" title="디자인" value="6"><label for="sex_female">디자인</label>
+                                        <input type="checkbox" name="artField" class="sex female" title="시각디자인" value="7"><label for="sex_female">시각디자인</label>
+                                        <input type="checkbox" name="artField" class="sex female" title="패션디자인" value="8"><label for="sex_female">패션디자인</label>
+                                        <input type="checkbox" name="artField" class="sex female" title="산업디자인" value="9"><label for="sex_female">산업디자인</label>
+                                        <p class="compul" id="txtGender"></p>
+                                    </td>
+                                </tr>
+
+                                <tr>
                                     <th>이메일</th>
                                     <td>
-                                        <input type="text" name="EmailId" class="tBox tEmail" id="dev_M_Email" maxlength="25" title="이메일아이디"> <span>@</span> <input type="text" name="EmailDomain" class="tBox tEmail" id="dev_mail_etc" maxlength="25" title="이메일계정" onfocus="$mship.reg.emailChk1()">
-                                        <select name="C_Email_Cp" class="tBox joinBx tEmail" id="dev_email_Cp" title="이메일 서비스업체 선택">
+                                        <input type="text" name="emailId" class="tBox tEmail" id="emailId" maxlength="25" title="이메일아이디" required="required"> <span>@</span> 
+                                        <input type="text" name="emailDomaina" class="tBox tEmail" id="emailDomaina" maxlength="25" title="이메일계정" onfocus="$mship.reg.emailChk1()">
+                                        <input type="hidden" name="emailDomain" id="emailDomain" value="">
+                                        
+                                        <select name="emailDomainS" class="tBox joinBx tEmail" id="emailDomainS" title="이메일 서비스업체 선택">
                                             <option value="">선택하세요</option>
                                             <option value="naver.com">naver.com</option>
                                             <option value="hanmail.net">hanmail.net</option>
@@ -620,10 +845,9 @@
                                             <option value="hotmail.com">hotmail.com</option>
                                             <option value="dreamwiz.com">dreamwiz.com</option>
                                             <option value="gmail.com">gmail.com</option>
-                                            <option value="etc">직접입력</option>
+                                            <option value="">직접입력</option>
                                         </select>
                                         <p class="compul" id="txtEmail"></p>
-                                        <input id="dev_mailChkStat" name="dev_mailChkStat" type="hidden" value="">
                                     </td>
                                 </tr>
                                 <tr>
@@ -632,58 +856,70 @@
                                 <tr>
                                     <th>휴대폰 번호</th>
                                     <td>
-                                        <select name="Phone1" class="tBox joinBx tPhone" id="dev_hphone1" title="휴대폰 번호">
-                                            <option value="010">010</option>
-                                            <option value="011">011</option>
-                                            <option value="016">016</option>
-                                            <option value="017">017</option>
-                                            <option value="018">018</option>
-                                            <option value="019">019</option>
+                                        <select name="phone1" class="tBox joinBx tPhone" id="phone1" title="휴대폰 번호">
+                                            <option value="1">010</option>
+                                            <option value="2">011</option>
+                                            <option value="3">016</option>
+                                            <option value="4">017</option>
+                                            <option value="5">018</option>
+                                            <option value="6">019</option>
                                         </select> -
-                                        <input type="text" name="Phone2" id="dev_hphone2" maxlength="4" class="tBox tPhone" title="휴대폰 번호"> -
-                                        <input type="text" name="Phone3" id="dev_hphone3" maxlength="4" class="tBox tPhone" title="휴대폰 번호">
-                                        <img src="https://contents.albamon.kr/monimg/common/btn/btn_confirm.png" alt="인증번호 받기" id="btnCert">
+                                        <input type="text" name="phone2" id="phone2" maxlength="4" class="tBox tPhone" title="휴대폰 번호" required="required"> -
+                                        <input type="text" name="phone3" id="phone3" maxlength="4" class="tBox tPhone" title="휴대폰 번호" required="required">
 
-                                        <input type="text" name="dev_CertNo" title="인증번호" class="tBox tConfirmNum" id="dev_CertNo" maxlength="20">
-                                        <img class="btnConfirmNum" src="https://contents.albamon.kr/monimg/common/btn/btn_confirm_ok.png" alt="확인" id="btnCertSubmit">
                                         <p class="compul" id="txtCert"></p>
-                                        <input id="dev_phoneChkStat" name="dev_phoneChkStat" type="hidden" value="">
-                                        <input id="dev_certChkStat" name="dev_certChkStat" type="hidden" value="">
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>주소(동까지)</th>
+                                    <th>매장 번호</th>
                                     <td>
-                                        <select name="Duty_Si_Code" class="tBox joinBx tAddr" id="Duty_Si_Code" title="시, 도 선택">
-                                            <option value="">시·도</option>
-                                                    <option value="I000">서울특별시</option>
-                                                    <option value="E000">광주광역시</option>
-                                                    <option value="F000">대구광역시</option>
-                                                    <option value="G000">대전광역시</option>
-                                                    <option value="H000">부산광역시</option>
-                                                    <option value="J000">울산광역시</option>
-                                                    <option value="K000">인천광역시</option>
-                                                    <option value="1000">세종특별자치시</option>
-                                                    <option value="B000">경기도</option>
-                                                    <option value="A000">강원도</option>
-                                                    <option value="C000">경상남도</option>
-                                                    <option value="D000">경상북도</option>
-                                                    <option value="L000">전라남도</option>
-                                                    <option value="M000">전라북도</option>
-                                                    <option value="O000">충청남도</option>
-                                                    <option value="P000">충청북도</option>
-                                                    <option value="N000">제주특별자치도</option>
-                                        </select>
-                                        <select name="Duty_Gu_Code" class="tBox joinBx tAddr" id="Duty_Gu_Code" title="시, 군, 구 선택">
-                                            <option value="">시·군·구</option>
-                                        </select>
-                                        <select name="Duty_Dong_Code" class="tBox joinBx tAddr" id="Duty_Dong_Code" title="동, 읍, 면 선택">
-                                            <option value="">동·읍·면</option>
-                                        </select>
-                                        <p class="compul" id="txtMAddr"></p>
-                                        <input id="dev_mAddrChkStat" name="dev_mAddrChkStat" type="hidden" value="">
+                                        <select name="tel_cd" class="tBox joinBx tPhone" id="tel_cd" title="휴대폰 번호">
+                                            <option value="1">02</option>
+                                            <option value="2">062</option>
+                                            <option value="3">053</option>
+                                            <option value="4">042</option>
+                                            <option value="5">051</option>
+                                            <option value="6">052</option>
+                                            <option value="7">032</option>
+                                            <option value="8">044</option>
+                                            <option value="9">031</option>
+                                            <option value="10">033</option>
+                                            <option value="11">055</option>
+                                            <option value="12">054</option>
+                                            <option value="13">061</option>
+                                            <option value="14">063</option>
+                                            <option value="15">041</option>
+                                            <option value="16">043</option>
+                                            <option value="17">064</option>
+                                            
+                                        </select> 
+                                        <input type="text" name="tel2" id="tel2" maxlength="4" class="tBox tPhone" title="휴대폰 번호" required="required"> -
+                                        <input type="text" name="tel3" id="tel3" maxlength="4" class="tBox tPhone" title="휴대폰 번호" required="required">
+
+                                        <p class="compul" id="txtCert"></p>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <th>주소</th>
+                                    <td>
+                                    	<input type="text" name="zipNo" id="zipNo" maxlength="4" class="tBox tPhone" title="휴대폰 번호" required="required">&emsp;<input type="button" value="우편번호검색" style="width: 80px; height: 32px; padding-left: 5px" onclick="goPopup()"><br><br>
+                                        <div style="width: 356px">
+                                        <input type="text" class="tBox" id="dev_u_name" id="addr" name="addr" style="width: 94%"><br><br>
+                                        <input type="text" class="tBox" id="addrDetail" name="addrDetail" style="width: 94%">
+                                        <input type="hidden" id="sigungu_nm" name="sigungu_nm">
+										<input type="hidden" id="dong_cd" name="dong_cd">
+										
+										<input type="hidden" id="coordinateX" name="coordinateX">
+										<input type="hidden" id="coordinateY" name="coordinateY">
+                                        </div>
+                                        
+										
+                                        <p class="compul" id="txtEmail"></p>
+                                    </td>
+                                </tr>
+                                
+                                
+                                
                                 <tr>
                                     <td colspan="2" class="tLine"><div></div></td>
                                 </tr>
@@ -745,7 +981,7 @@
                 </div>
                 <div class="info_confirm" id="boxJoinConfirm" style="display: none;">입력한 정보를 다시 확인해주세요.</div>
                 <div class="btnBx">
-                    <a href="#" id="btn_submit"><img src="https://contents.albamon.kr/monimg/common/btn/btn_user_join.png" alt="가입하기"></a>
+                    <a href="#" id="btn_submit" onclick="formSubmit()"><img src="https://contents.albamon.kr/monimg/common/btn/btn_user_join.png" alt="가입하기"></a>
                 </div>
             </div>
         <!-- 회원가입폼 끝 //-->
@@ -762,116 +998,10 @@
         </div>
 
 
-    <script type="text/javascript">
-        /* js lazy fn */
-        function loadScript(url, callback) {
-            var scriptEle = document.createElement('script');
-            scriptEle.type = 'text/javascript';
-            var loaded = false;
-            scriptEle.onreadystatechange = function () {
-                // 서버에서 읽어올 경우 loaded, 캐쉬에서 가져올 경우 complete 이기에 둘 모두 처리
-                if (this.readyState == 'loaded' || this.readyState == 'complete') {
-                    if (loaded) return;
-                    loaded = true;
-                    callback();
-                }
-            }
-            scriptEle.onload = function () {
-                callback();
-            };
-            scriptEle.src = url;
-            document.getElementsByTagName('head')[0].appendChild(scriptEle);
-        }
-
-        (function ($) {
-            $(window).load(function () {
-                //google-analytics
-                loadScript('/Scripts/js/adcode/google-analytics.js', function () { });
-                
-                loadScript('/Scripts/js/adcode/a_square_2017.js', function () { });
-                
-                //Facebook Pixel
-                loadScript('/Scripts/js/adcode/Facebook_Pixel.js', function () { FBPixel("", ""); });
-            });
-        })(jQuery);
-
-    </script>
     
 
 
-    <script type="text/javascript">
-        var _NiKwdAdvertiserID = "949";
-        (function ($) {
-            $(window).load(function () {
-                loadScript('/Scripts/js/adcode/NiKwd.roi.tracer.land.js', function () { });
-            });
-        })(jQuery);
-    </script>
-
     
-    
-
-    
-
-<script type="text/javascript"> if (window.dsHelper) {   } </script>
-<script type="text/javascript">   
-
-    var DS_UID_Value = "";
-
-    if (window._dslog) {
-        window._dslog.setUID(DS_UID_Value);
-        window._dslog.dispatch();
-    } else {
-        var dslog_tag = document.getElementById("dslog_tag");
-        if (dslog_tag != null && dslog_tag != undefined) {
-            dslog_tag.onload = dslog_tag.onreadystatechange = function () {
-                dslog_tag.onload = dslog_tag.onreadystatechange = null;
-                window._dslog.setUIDCookie(DS_UID_Value);
-                window._dslog.dispatch();
-            }
-        }
-    }
-</script>
-
-    
-        <div id="wp_tg_cts" style="display:none;"><script id="wp_id_script_1531040250500" src="//altg.widerplanet.com/delivery/wp.js"></script><script id="wp_tag_script_1531040250558" src="//astg.widerplanet.com/delivery/wpc.php?v=1&amp;ver=4.0&amp;r=1&amp;md=bs&amp;eid=4-b27972defc81e82db513df684eaa4dad10012f13ca308f6cf54fbf2457d95814bb7d94fb138efe0d4fae53b6a3af5d80ab7fc76170dda909f9b452265d96d9f57fc92cc71dd9ca451d050d8581fb2884&amp;ty=Home&amp;ti=34086&amp;device=web&amp;charset=UTF-8&amp;tc=1531040250558&amp;ref=https%3A%2F%2Fwww.albamon.com%2Faccount%2Fregist&amp;loc=https%3A%2F%2Fwww.albamon.com%2FAccount%2Fregist%2Fwrite-m"></script></div>
-    <script type="text/javascript">
-        var wptg_tagscript_vars = wptg_tagscript_vars || [];
-        wptg_tagscript_vars.push(
-        (function () {
-            return {
-                wp_hcuid: "",
-                ti: "34086",
-                ty: "Home",
-                device: "web"
-            };
-        }));
-         if (typeof(loadScript) !== 'function') {
-             /* js lazy fn */
-             function loadScript(url, callback) { 
-                 var scriptEle = document.createElement('script');
-                 scriptEle.type = 'text/javascript';
-                 var loaded = false;
-                 scriptEle.onreadystatechange = function () {
-        	        // 서버에서 읽어올 경우 loaded, 캐쉬에서 가져올 경우 complete 이기에 둘 모두 처리
-        	        if (this.readyState == 'loaded' || this.readyState == 'complete') {
-        		        if (loaded) return;
-        		            loaded = true;
-                         callback();
-        	            }
-                 }
-                 scriptEle.onload = function () {
-                     callback();
-                 };
-                 scriptEle.src = url;
-                 document.getElementsByTagName('head')[0].appendChild(scriptEle);
-             }
-         }
-        $(window).load(function () {loadScript('//cdn-aitg.widerplanet.com/js/wp_astg_4.0.js', function () { });});
-    </script>
-
-    
-    <noscript><img src="//ngc7.nsm-corp.com/?uid=CN3B330392286&je=n&" border=0 width=0 height=0 /></noscript>
 
 
 </body>

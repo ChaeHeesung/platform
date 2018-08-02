@@ -88,6 +88,7 @@ public class UserController {
 	@RequestMapping(value = "/userjoin", method = RequestMethod.GET)
 	public String userJoin() throws Exception {
 		
+		
 		return "index";
 	}
 	

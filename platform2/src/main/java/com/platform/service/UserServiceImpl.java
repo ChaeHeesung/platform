@@ -24,8 +24,8 @@ public class UserServiceImpl implements UserService{
 	public void join(UserVO vo) throws Exception {
 		dao.join(vo);
 		UserVO user = dao.checkJoin(vo);
-		dao.joinAuthor(user.getNo());
-		dao.joinGroupMember(user.getNo());
+		dao.joinAuthor(user.getNo(), "ROLE_USER");
+		dao.joinGroupMember(user.getNo(), 1);
 	}
 
 	@Override

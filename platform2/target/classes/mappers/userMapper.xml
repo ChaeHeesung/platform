@@ -20,16 +20,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="joinAuthor">
-		INSERT INTO user_authorities_tb (user_sq, authority) VALUES (#{id}, 'ROLE_USER');
+		INSERT INTO user_authorities_tb (user_sq, authority) VALUES (#{user_sq}, #{authority});
 	</select>
 	
 	<select id="joinGroupMember">
-		INSERT INTO group_members_tb (group_id, user_sq) VALUES ('1', #{id});
+		INSERT INTO group_members_tb (group_id, user_sq) VALUES (#{group_id}, #{user_sq});
 	</select>
-	
 	
 	<select id="checkJoin" resultMap="ReturnUserVO">
-		SELECT user_sq, user_id FROM USER_TB WHERE user_id = #{id}
+		SELECT user_sq, user_id FROM USER_TB WHERE user_id = #{id};
 	</select>
-	
 </mapper>

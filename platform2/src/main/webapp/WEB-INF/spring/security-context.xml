@@ -27,7 +27,10 @@
 			access="permitAll" />
 
 		<intercept-url pattern="/dream/space/**"
-			access="hasRole('DREAM')" />
+			access="hasRole('SPACEDREAM')" />
+		<intercept-url pattern="/dream/art/**"
+			access="hasRole('ARTDREAM')" />
+			
 		<intercept-url pattern="/**" access="permitAll" />
 
 

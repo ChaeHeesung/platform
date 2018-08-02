@@ -41,18 +41,45 @@
 			ref="sqlSessionFactory"></constructor-arg>
 	</bean>
 	
-	<context:component-scan
-		base-package="com.platform.dream.persistence"></context:component-scan>
-	<context:component-scan
-		base-package="com.platform.dream.service"></context:component-scan>
+	
+	<!-- MAIN -->
 	<context:component-scan
 		base-package="com.platform.persistence"></context:component-scan>
 	<context:component-scan
 		base-package="com.platform.service"></context:component-scan>
+		
+	<!-- DREAM -->
 	<context:component-scan
-		base-package="com.platform.library.dao"></context:component-scan>
+		base-package="com.platform.dream.persistence"></context:component-scan>
+	<context:component-scan
+		base-package="com.platform.dream.service"></context:component-scan>
+	
+	<!-- SHOP -->
+	<context:component-scan
+		base-package="com.platform.shop.persistence"></context:component-scan>
+	<context:component-scan
+		base-package="com.platform.shop.service"></context:component-scan>
+	
+	<!-- TRAVEL -->
+	<context:component-scan
+		base-package="com.platform.safety.persistence"></context:component-scan>
+	<context:component-scan
+		base-package="com.platform.safety.service"></context:component-scan>
+		
+	
+	<!-- SPORTS -->
+	<context:component-scan
+		base-package="com.platform.sports.persistence"></context:component-scan>
+	<context:component-scan
+		base-package="com.platform.sports.service"></context:component-scan>
+		
+	<!-- library -->
+	<context:component-scan
+		base-package="com.platform.library.persistence"></context:component-scan>
 	<context:component-scan
 		base-package="com.platform.library.service"></context:component-scan>
+	<context:component-scan
+		base-package="com.platform.library.dao"></context:component-scan>
 	<!-- 
 	<context:component-scan
 		base-package="org.zerock.aop"></context:component-scan>
