@@ -80,6 +80,7 @@ public class Admin_myoController {
 	@RequestMapping(value = "/select_schedule", method = RequestMethod.GET)
 	public @ResponseBody List<HashMap<String, Object>> select_schedule() throws Exception {
 		
+		
 		Calendar cal = Calendar.getInstance();		
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");		
 		List<GameVO> list = gameService.select_schedule();
