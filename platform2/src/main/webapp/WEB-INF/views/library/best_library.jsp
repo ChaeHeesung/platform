@@ -79,7 +79,7 @@ img {
 				<td width="142px" height="213px" rowspan="4"
 					class="border-bottom border-left border-right"><img
 					src="${l.img}"></td>
-				<td class="border-bottom border-right">${l.title}</td>
+				<td class="border-bottom border-right"><h3>${l.title}</h3></td>
 			</tr>
 			<tr>
 				<td class="border-bottom border-right">${l.author}</td>
