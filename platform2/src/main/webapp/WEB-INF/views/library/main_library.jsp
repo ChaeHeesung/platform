@@ -21,6 +21,16 @@
 <script
 	src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<style type="text/css">
+	#dd ul li {
+		display: none;
+	}
+	
+	#dd:hover ul li {
+		display: block;
+	}
+	
+</style>
 </head>
 <body id="main">
 	<nav class="navbar navbar-inverse">
@@ -53,12 +63,18 @@
 				<%
 					}
 				%>
+				<li id="dd"><a href="http://localhost:8080/library/book">관리자메뉴</a>
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="http://localhost:8080/library/book">도서관리</a>
+						<li><a href="http://localhost:8080/library/book">도서관리</a>
+						<li><a href="http://localhost:8080/library/book">도서관리</a>
+					</ul>
+				</li>
 				<li><a href="http://localhost:8080/library/">검색</a></li>
 				<li><a href="http://localhost:8080/library/map">지도</a></li>
 				<li><a href="http://localhost:8080/library/recommend">추천도서</a></li>
 				<li><a href="http://localhost:8080/library/record">조회기록</a></li>
 				<li><a href="http://localhost:8080/library/best">베스트셀러</a></li>
-				<li><a href="http://localhost:8080/library/book">도서관리</a></li>
 			</ul>
 		</div>
 	</div>
